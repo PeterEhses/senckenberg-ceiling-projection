@@ -3,6 +3,8 @@
 ## dependency documentation:
   https://www.npmjs.com/package/maptastic for projection mapping keystone
   https://www.npmjs.com/package/fast-random for seeded fast prng
+  https://www.curtainsjs.com/ for web from dom element
+  https://canvas-txt.geongeorge.com/ for multiline web-canvas text
 
 ## Project setup
 ```

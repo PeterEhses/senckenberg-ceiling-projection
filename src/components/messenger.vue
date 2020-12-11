@@ -83,7 +83,8 @@ export default {
         lifeMin: 2000,
         lifeMax: 100000,
         lifeCharMultiplier: 20,
-        style: "speechbubble"
+        style: "speechbubble",
+        gl: true
       }
 
       this.$set(this.activeMessages, id, {text: this.messages[id], options: messageOptions})

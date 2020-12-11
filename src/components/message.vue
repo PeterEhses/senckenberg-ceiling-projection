@@ -1,6 +1,9 @@
 <template>
   <div class="messageContainer" :style="containerStyle">
-    <div :class="[options.style ? options.style : 'message', 'messageBase']" :style="messageStyle" ref="message">
+    <glmessage  v-if="options.gl" class="messageBase" :style="messageStyle" ref="glmessage">
+      {{text}}
+    </glmessage>
+    <div v-else :class="[options.style ? options.style : 'message', 'messageBase']" :style="messageStyle" ref="message">
       {{text}}
     </div>
   </div>
@@ -8,7 +11,12 @@
 </template>
 
 <script>
+
+import glmessage from "@/components/glmessage/glmessage.vue"
 export default {
+  components: {
+    glmessage
+  },
   props: [
     "text",
     "options"
@@ -35,6 +43,12 @@ export default {
     },
     messageDimensions(){
       if(this.isMounted){
+        if(this.options.gl){
+          return {
+            x: this.$refs.glmessage.$el.clientWidth,
+            y: this.$refs.glmessage.$el.clientHeight
+          }
+        }
         return {
           x: this.$refs.message.clientWidth,
           y: this.$refs.message.clientHeight
