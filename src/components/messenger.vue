@@ -14,6 +14,9 @@
 import message from "@/components/message.vue"
 const random = require('fast-random');
 export default {
+  props: [
+    'rendermode'
+  ],
   components: {
     message
   },
@@ -84,7 +87,7 @@ export default {
         lifeMax: 100000,
         lifeCharMultiplier: 20,
         style: "speechbubble",
-        gl: true
+        rendermode: this.rendermode
       }
 
       this.$set(this.activeMessages, id, {text: this.messages[id], options: messageOptions})

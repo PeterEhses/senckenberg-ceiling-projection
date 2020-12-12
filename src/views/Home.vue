@@ -1,6 +1,6 @@
 <template>
   <div class="home">
-
+    <vswitch v-model="rendermode"/>
     <keystoner>
       <div class="keystoneContainer">
         <youtube
@@ -11,7 +11,7 @@
           :resize="false"
           :fitParent="true"
           ></youtube>
-          <messenger/>
+          <messenger :rendermode="rendermode"/>
       </div>
     </keystoner>
   </div>
@@ -20,14 +20,17 @@
 <script>
 import keystoner from "@/components/keystoner.vue"
 import messenger from "@/components/messenger.vue"
+import vswitch from "@/components/vswitch.vue"
 export default {
   name: 'Home',
   components: {
     keystoner,
-    messenger
+    messenger,
+    vswitch
   },
   data(){
     return{
+      rendermode: 'gl',
       playervars: {
         autoplay: 1,
         controls: 0,
@@ -36,7 +39,6 @@ export default {
         iv_load_policy: 3,
         loop: 1,
         modestbranding: 1,
-
       }
     }
   },

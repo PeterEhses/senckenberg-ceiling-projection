@@ -16,6 +16,7 @@
     "normalize.css": "^8.0.1",
     "raw-loader": "^4.0.2",
     "typeface-roboto": "^1.1.13",
+    "typeface-varela-round": "^1.1.13",
     "vue": "^2.6.11",
     "vue-router": "^3.2.0",
     "vue-youtube": "^1.4.0",

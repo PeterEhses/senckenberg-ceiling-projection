@@ -12,13 +12,14 @@
 </template>
 
 <script>
-import {Curtains, Plane} from "curtainsjs"
+import {Curtains, Plane, ShaderPass} from "curtainsjs"
 import canvasTxt from 'canvas-txt'
 export default {
   data(){
     return{
       curtains: null,
       plane: null,
+      shaderPass: null,
       id: null,
       curtainsParams: {
         vertexShader: require('./glmessage.vert').default, // our vertex shader ID
@@ -29,6 +30,27 @@ export default {
             type: "1f", // this means our uniform is a float
             value: 0,
           },
+          resolution: {
+            name: "uResolution",
+            type: "2f",
+            value: [0,0]
+          }
+        },
+      },
+      shaderPassParams: {
+        vertexShader: require('./shaderPass.vert').default, // ID of your vertex shader script tag
+        fragmentShader: require('./shaderPass.frag').default, // ID of your fragment shader script tag
+        uniforms: { // uniforms are what will allow you to interact with your shader pass
+          time: {
+            name: "uTime", // uniform name that will be passed to our shaders
+            type: "1f", // this means our uniform is a float
+            value: 0, // initial value of the uniform
+          },
+          resolution: {
+            name: "uResolution",
+            type: "2f",
+            value: [0,0]
+          }
         },
       }
     }
@@ -38,10 +60,12 @@ export default {
 
       this.curtains = new Curtains({
         container: this.$refs.canvas,
+        pixelRatio: 2,
         //premultipliedAlpha: true,
         //antialias: false,
         //production: true,
       })
+
       this.plane = new Plane(this.curtains, this.$refs.plane, this.curtainsParams)
 
       const canvas = document.createElement("canvas")
@@ -49,17 +73,23 @@ export default {
       canvas.setAttribute("data-sampler", "planeTexture");
       // and load it into our plane
       this.plane.loadCanvas(canvas)
-
       this.plane.onLoading((texture) => {
           // our canvas texture is ready
           texture.shouldUpdate = false
 
           // we write our title in our canvas
           this.writeText( texture.source)
+          this.plane.uniforms.resolution.value = [this.plane.gl.drawingBufferHeight, this.plane.gl.drawingBufferWidth]
         }).onRender(() => {
           // use the onRender method of our plane fired at each requestAnimationFrame call
+
           this.plane.uniforms.time.value++; // update our time uniform value
       });
+      this.shaderPass = new ShaderPass(this.curtains, this.shaderPassParams);
+      this.shaderPass.onRender(() => {
+        this.shaderPass.uniforms.resolution.value = [this.plane.gl.drawingBufferHeight, this.plane.gl.drawingBufferWidth]
+      })
+
     },
     destroyCurtains(){
       this.curtains.dispose()
@@ -81,15 +111,6 @@ export default {
       canvas.height = htmlPlaneHeight
       const context = canvas.getContext("2d")
 
-      // draw our title with the original style
-      context.fillStyle = htmlPlaneStyle.color
-      context.font = htmlPlaneStyle.fontSize + " " + htmlPlaneStyle.fontFamily
-      context.fontStyle = htmlPlaneStyle.fontStyle
-      context.textAlign = htmlPlaneStyle.textAlign
-      // vertical alignment is a bit hacky
-      context.textBaseline = "middle"
-      //context.fillText(htmlPlane.innerText, 0, htmlPlaneHeight / 1.8)
-      //console.log(context)
       const padding = [
         this.stripPxUnit(htmlPlaneStyle.paddingTop),
         this.stripPxUnit(htmlPlaneStyle.paddingRight),
@@ -110,6 +131,7 @@ export default {
       canvasTxt.fontWeight = htmlPlaneStyle.fontWeight
       canvasTxt.lineHeight = lineHeight
       canvasTxt.debug = false
+      canvasTxt.align = htmlPlaneStyle.textAlign
       canvasTxt.vAlign = 'middle'
       canvasTxt.drawText(context, htmlPlane.innerText, padding[3], padding[0]-lineHeight*.3, context.canvas.width-padding[3]-padding[1], context.canvas.height-padding[0]-padding[2])
 
@@ -138,9 +160,12 @@ export default {
 .glmessage{
     padding: 0;
     .plane{
+      font-size: 1.5em;
       padding: 2em;
       color: white;
-      font-weight: 600;
+      font-family: 'Varela Round';
+      text-align: center;
+      font-weight: 300;
       line-height: 1.33;
       // background: white;
       //border: 1px solid black;

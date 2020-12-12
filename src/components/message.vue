@@ -1,6 +1,6 @@
 <template>
   <div class="messageContainer" :style="containerStyle">
-    <glmessage  v-if="options.gl" class="messageBase" :style="messageStyle" ref="glmessage">
+    <glmessage  v-if="options.rendermode == 'gl'" class="messageBase" :style="messageStyle" ref="glmessage">
       {{text}}
     </glmessage>
     <div v-else :class="[options.style ? options.style : 'message', 'messageBase']" :style="messageStyle" ref="message">
@@ -43,7 +43,7 @@ export default {
     },
     messageDimensions(){
       if(this.isMounted){
-        if(this.options.gl){
+        if(this.options.rendermode == 'gl'){
           return {
             x: this.$refs.glmessage.$el.clientWidth,
             y: this.$refs.glmessage.$el.clientHeight

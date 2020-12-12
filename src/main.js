@@ -3,6 +3,7 @@ import App from './App.vue'
 import router from './router'
 import store from './store'
 require('typeface-roboto')
+require('typeface-varela-round')
 
 Vue.config.productionTip = false
 

@@ -8,8 +8,9 @@ uniform mat4 planeTextureMatrix;
 // custom varyings
 varying vec3 vVertexPosition;
 varying vec2 vTextureCoord;
+uniform vec2 vResolution;
 void main() {
-    gl_Position = uPMatrix * uMVMatrix * vec4(aVertexPosition, 1.0);
+    gl_Position = uPMatrix * uMVMatrix * vec4(aVertexPosition, 1.);
     // varyings
     vVertexPosition = aVertexPosition;
     vTextureCoord = (planeTextureMatrix * vec4(aTextureCoord, 0.0, 1.0)).xy;
