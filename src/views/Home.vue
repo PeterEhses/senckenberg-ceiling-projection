@@ -3,7 +3,15 @@
     <vswitch v-model="rendermode"/>
     <keystoner>
       <div class="keystoneContainer">
+        <video
+          autoplay="true"
+          controls="false"
+          loop="true"
+        >
+           <source src="ocean-maximum.mp4" type="video/mp4">
+        </video>
         <youtube
+          v-if="false"
           video-id="hasdCkzXrhE"
           ref="youtube"
           :player-vars="playervars"
